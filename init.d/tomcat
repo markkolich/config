@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# Startup script for Tomcat Servlet Engine
+#
+# chkconfig: 345 86 14
+# description: Tomcat Servlet Engine
+# processname: tomcat
+# pidfile: /usr/local/jakarta-tomcat/bin/tomcat.pid
+#
+
+# The Tomcat home directory.
+TOMCAT_HOME=/core/www.tomcat/latest
+
+# Tomcat will run as this user.
+TOMCAT_USER=mark
+
+RETVAL=0
+
+start() {
+    # Start Tomcat in normal mode
+    SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+    if [ $SHUTDOWN_PORT -ne 0 ]; then
+        echo "Tomcat already running."
+    else
+        echo "Starting Tomcat..."
+        /bin/su $TOMCAT_USER $TOMCAT_HOME/bin/startup.sh
+        SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+        while [ $SHUTDOWN_PORT -eq 0 ]; do
+            sleep 1
+            SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+        done
+        RETVAL=$?
+        echo "Tomcat started!"
+    fi
+}
+
+stop() {
+    SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+    if [ $SHUTDOWN_PORT -eq 0 ]; then
+        echo "Tomcat not running."
+    else
+        echo "Stopping Tomcat..."
+        /bin/su $TOMCAT_USER $TOMCAT_HOME/bin/shutdown.sh
+        SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+        while [ $SHUTDOWN_PORT -ne 0 ]; do
+            sleep 1
+            SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+        done
+        RETVAL=$?
+        echo "Tomcat stopped!"
+    fi
+}
+
+status() {
+    SHUTDOWN_PORT=`netstat -vatn|grep LISTEN|grep 8005|wc -l`
+    if [ $SHUTDOWN_PORT -eq 0 ]; then
+        echo "Tomcat is not running."
+    else
+        MODE="normal"
+        JPDA_PORT=`netstat -vatn|grep LISTEN|grep 8100|wc -l`
+        if [ $JPDA_PORT -ne 0 ]; then
+            MODE="debug"
+        fi
+        echo "Tomcat running in $MODE mode."
+    fi
+}
+
+case "$1" in
+  start)
+	start
+        ;;
+  stop)
+	stop
+        ;;
+  status)
+        status
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|status}"
+        exit 1
+esac
+
+exit $RETVAL
