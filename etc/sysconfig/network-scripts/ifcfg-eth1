@@ -1,0 +1,15 @@
+# Broadcom Corporation NetXtreme BCM5701 Gigabit Ethernet
+DEVICE=eth1
+BOOTPROTO=dhcp
+HWADDR=00:30:6E:F4:B1:35
+ONBOOT=yes
+## It seems that using PEERDNS=yes was somehow telling dhclient to
+## use the DNS servers provided by Comcast instead of the ones I
+## really want to use as defined here.  Commenting out PEERNDS
+## seems to have made things more reliable; at least the DNS servers
+## I ~really~ want are added to /etc/resolv.conf more often than not.
+## -- Mark, 1/4/12
+#PEERDNS=yes
+DNS1="1.0.0.2"
+DNS2="8.8.8.8"
+SEARCH="kolich.local"

@@ -1,0 +1,6 @@
+# Intel Corporation 82541GI Gigabit Ethernet Controller
+DEVICE=eth0
+BOOTPROTO=dhcp
+HWADDR=00:11:85:AE:E1:F0
+ONBOOT=no
+HOTPLUG=no

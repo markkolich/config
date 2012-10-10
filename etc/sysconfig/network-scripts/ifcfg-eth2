@@ -1,0 +1,9 @@
+# Broadcom Corporation NetXtreme BCM5701 Gigabit Ethernet
+DEVICE=eth2
+BOOTPROTO=static
+BROADCAST=1.0.0.255
+HWADDR=00:30:6E:E9:7F:F7
+IPADDR=1.0.0.2
+NETMASK=255.255.255.0
+NETWORK=1.0.0.0
+ONBOOT=yes
