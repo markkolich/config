@@ -7,7 +7,7 @@ then
   SBT_BOOT_PROPERTIES="-Dsbt.boot.properties=$WD/sbt.boot.properties"
 fi
 
-$JAVA_HOME/bin/java -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -Xss10M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g -jar $SBT_HOME/sbt-launch.jar "$@"
+$JAVA_HOME/bin/java -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -Xss10M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g -jar $SBT_HOME/sbt-launch.jar "$@"
 
 ##$JAVA_HOME/bin/java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8088 -Dhttp.nonProxyHosts="localhost|build-squid.eng.vmware.com" -Dsbt.boot.properties=$WD/sbt.boot.properties -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -Xss10M -noverify -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g -jar $SBT_HOME/sbt-launch.jar "$@"
 
