@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Startup script for internal RAM disk configuration.
+# Builds RAM disk for Apache HTTPD's mod_disk_cache
+#
+# chkconfig: - 84 16
+# description: Internal RAM disk configuration
+#
+
+RAMDISK_HOME=/mem
+
+RETVAL=0
+
+start() {
+  /sbin/mkfs.ext3 -q /dev/ram
+  /bin/mount /dev/ram /mem
+  /bin/chown root:root /mem
+  /bin/chmod 1777 /mem
+}
+
+stop() {
+  /bin/umount /mem 
+}
+
+case "$1" in
+  start)
+	start
+        ;;
+  stop)
+	stop
+        ;;
+  *)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+esac
+
+exit $RETVAL
